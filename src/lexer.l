@@ -147,7 +147,9 @@ int display_style = 0;
 
 [0-9\.,]+(em|ex|px|in|cm|mm|mu|pt|pc|%) {char * normalized_px = mtex2MML_str_replace(yytext, ",", "."); yylval=mtex2MML_copy_string(normalized_px); mtex2MML_free_string(normalized_px); return PXSTRING; }
 
-[a-zA-Zа-яА-Я]       {yylval=mtex2MML_copy_string(yytext); return MI;}
+[a-zA-Z]       {yylval=mtex2MML_copy_string(yytext); return MI;}
+
+[а-яА-Я]       {yylval=mtex2MML_copy_string(yytext); return MI;}
 
 [0-9]{1,3}(,[0-9]{3,3})*(\.[0-9]+)? |
 [0-9]*[\.][0-9]+                   |
@@ -1258,9 +1260,11 @@ int display_style = 0;
 
 "\\includegraphics"(\[[^\]]*\])?\{[^}]*\} ;
 
-"\\"[a-zA-Zа-яА-Я]+    {yylval=mtex2MML_copy_string(yytext+1); return MOP;}
+"\\"[a-zA-Z]+    {yylval=mtex2MML_copy_string(yytext+1); return MOP;}
 
-"\&"[a-zA-Zа-яА-Я_][a-zA-Zа-яА-Я0-9_]*";" |
+"\\"[а-яА-Я]+    {yylval=mtex2MML_copy_string(yytext+1); return MOP;}
+
+"\&"[a-zA-Z_][a-zA-Z0-9_]*";" |
 "\&#"[0-9]+";" |
 "\&#x"[a-fA-F0-9]+";"  {yylval=mtex2MML_copy_string(yytext); return MI;}
 
@@ -1271,14 +1275,14 @@ int display_style = 0;
 .              {return UNKNOWNCHAR;}
 }
 
-<ATTRIBUTELIST>"{"[ \t\n\r #a-zA-Zа-яА-Я0-9.:\-]*"}"  {BEGIN(MATH); yylval=mtex2MML_copy_string(yytext); if (yylval != mtex2MML_empty_string) { yylval[0]='"'; yylval[yyleng-1]='"'; } return ATTRLIST;}
+<ATTRIBUTELIST>"{"[ \t\n\r #a-zA-Z0-9.:\-]*"}"  {BEGIN(MATH); yylval=mtex2MML_copy_string(yytext); if (yylval != mtex2MML_empty_string) { yylval[0]='"'; yylval[yyleng-1]='"'; } return ATTRLIST;}
 
 <BRACKETLIST>{
 "\["  {return ST;}
 "\]"  {BEGIN(MATH); return END;}
 [0-9\.,]+(em|ex|px|in|cm|mm|mu|pt|pc|%) {char * normalized_px = mtex2MML_str_replace(yytext, ",", "."); if (normalized_px[0] == '.') mtex2MML_remove_first_char(normalized_px); yylval=mtex2MML_copy_string(normalized_px); mtex2MML_free_string(normalized_px); return PXSTRING; }
-[0-9a-zA-Zа-яА-Я ]+":"[0-9a-zA-Zа-яА-Я ]+   {yylval=mtex2MML_copy_string(yytext); return STYLESTRING;}
-#?[0-9a-zA-Zа-яА-Я]+            {yylval=mtex2MML_copy_string(yytext); return COLORSTRING;}
+[0-9a-zA-Z ]+":"[0-9a-zA-Z ]+   {yylval=mtex2MML_copy_string(yytext); return STYLESTRING;}
+#?[0-9a-zA-Z]+            {yylval=mtex2MML_copy_string(yytext); return COLORSTRING;}
 [\t\n\r, ]+       ;
 .           {return yytext[0];}
 }
@@ -1484,19 +1488,19 @@ int display_style = 0;
 "\}\{"      {BEGIN(ENCLOSETEXTPARSE); return ST;}
 "\}\["      {BEGIN(ENCLOSEATTRPARSE); return ST;}
 "\{"       {return ST;}
-[a-zA-Zа-яА-Я,]+  {yylval=mtex2MML_copy_string(yytext); return ENCLOSENOTATION;}
+[a-zA-Z,]+  {yylval=mtex2MML_copy_string(yytext); return ENCLOSENOTATION;}
 [\t\n\r ]+       ;
 }
 
 <ENCLOSEATTRPARSE>{
 "\]\{"       {BEGIN(ENCLOSETEXTPARSE); return ST;}
-[a-zA-Zа-яА-Я,=0-9]+  {yylval=mtex2MML_copy_string(yytext); return ENCLOSEATTR;}
+[a-zA-Z,=0-9]+  {yylval=mtex2MML_copy_string(yytext); return ENCLOSEATTR;}
 [\t\n\r ]+       ;
 }
 
 <ENCLOSETEXTPARSE>{
 "\}"      {BEGIN(MATH); return ST;}
-[a-zA-Zа-яА-Я]+  {yylval=mtex2MML_copy_string(yytext); return ENCLOSETEXT;}
+[a-zA-Z]+  {yylval=mtex2MML_copy_string(yytext); return ENCLOSETEXT;}
 [\t\n\r ]+       ;
 }
 
