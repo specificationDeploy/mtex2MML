@@ -146,7 +146,7 @@ yydebug = 1;
  void (*mtex2MML_write_mathml) (const char * mathml) = mtex2MML_default_write_mathml;
  #endif
 
- char * mtex2MML_empty_string = (char *) "";
+ char * mtex2MML_empty_string = (char *) "?";
 
  /* Create a copy of a string, adding space for extra chars
   */
