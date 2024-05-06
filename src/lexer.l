@@ -149,7 +149,7 @@ int display_style = 0;
 
 [a-zA-Z]       {yylval=mtex2MML_copy_string(yytext); return MI;}
 
-[а-яА-Я]       {yylval=mtex2MML_copy_string(yytext); return MI;}
+[а-яА-Я]       {yylval=mtex2MML_copy_string(yytext+1); return MOP;}
 
 [0-9]{1,3}(,[0-9]{3,3})*(\.[0-9]+)? |
 [0-9]*[\.][0-9]+                   |
