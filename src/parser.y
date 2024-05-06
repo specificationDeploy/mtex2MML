@@ -995,7 +995,7 @@ bigdelim: BIG LEFTDELIM {
 };
 
 unrecognized: UNKNOWNCHAR {
-  $$ = mtex2MML_copy_string("<merror><mtext>Unknown character</mtext></merror>");
+  $$ = mtex2MML_copy_string("<merror><mtext>Неизвестный символ</mtext></merror>");
 };
 
 unaryminus: UNARYMINUS {
